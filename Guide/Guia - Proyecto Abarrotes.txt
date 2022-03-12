@@ -1,0 +1,35 @@
+INSTALACION : 
+1. Instalar NodeJS (trae incluido el npm)
+2. Instalar Nodemon 
+-> Abrir Terminal - Ubicarse en la ruta de nuestro proyecto - colocar el siguiente comando : npm i nodemon 
+
+
+COMANDOS PARA GESTIONAR PROYECTO NODE : 
+1. npm start -> ejecuta el proyecto 
+2. control + c -> detiene el proyecto  
+
+
+NOTAS IMPORTANTES (EN ORDEN) : 
+
+1. Archivo .env :  
+-> Se Utilizará para manejar las variables de entorno
+
+2. Archivo gitignore :
+-> Se utilizará para ignorar los cambios que subamos al repositorio Git 
+
+3. Archivo Readme.md : 
+-> Se utilizará para documentar la API 
+
+4. Archivos -> package-lock.json/package.json y Carpeta -> Node_modules 
+-> Se Generán automaticamente al crear un proyecto por medio de express/nodejs , la carpeta
+"node_modules" maneja las dependecias del proyecto y los archivos ".json" , manejan los datos 
+generales del proyecto , así como tambien las dependencias externas declaradas     
+
+5. BDD 
+-> Se utilizará para manejar los archivos relacionados a la BDD (Schemas , .Bats , ect...)
+
+6. Carpeta Logs : 
+-> Se utilizará para tener un historial ordenado de las ejecuciones que realize el proyecto 
+
+7. src y carpetas afines : 
+-> Se utilizarán para darle funcionalidad al proyecto 
