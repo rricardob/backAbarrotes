@@ -31,6 +31,7 @@ const swaggerOptions = {
   apis: [
     `${path.join(__dirname, '../routes/routesCliente.js')}`,
     `${path.join(__dirname, '../routes/routesCategoria.js')}`,
+    `${path.join(__dirname, '../routes/routesVendedor.js')}`,
     `${path.join(__dirname, '../routes/routesProducto.js')}`,
     `${path.join(__dirname, '../routes/routesComprobante.js')}`,
   ],
