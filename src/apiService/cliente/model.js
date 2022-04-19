@@ -132,7 +132,7 @@ Cliente.updateById = (id, cliente, result) => {
 // Remove 
 Cliente.remove = (id, result) => {
 
-    sql.query("UPDATE cliente SET eliminado = 1 WHERE cl_id = ?", id, (err, res) => {
+    sql.query("UPDATE comprobante SET eliminado = 1 WHERE co_id = ?", id, (err, res) => {
 
     if (err) {
         Logger.error("error: ", err);
