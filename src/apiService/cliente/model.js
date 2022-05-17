@@ -3,7 +3,7 @@ const { sql } = require('../../services/mysql');
 
 // Constructor
 const Cliente = function (cliente) {
-  (this.cl_id = cliente.cl_id),
+    (this.cl_id = cliente.cl_id),
     (this.cl_nombre = cliente.cl_nombre),
     (this.cl_apellido = cliente.cl_apellido),
     (this.cl_dni = cliente.cl_dni),
@@ -12,7 +12,7 @@ const Cliente = function (cliente) {
     (this.cl_telefono = cliente.cl_telefono),
     (this.cl_u_create = cliente.cl_u_create),
     (this.cl_u_update = cliente.cl_u_update);
-  this.eliminado = cliente.eliminado;
+    this.eliminado = cliente.eliminado;
 };
 
 // Create

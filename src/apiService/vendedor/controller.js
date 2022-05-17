@@ -23,7 +23,6 @@ exports.create = (req, res) => {
     ve_clave: req.body.ve_clave,
     ve_u_create: req.body.ve_u_create,
     ve_u_update: req.body.ve_u_update,
-    eliminado: req.body.eliminado
     });
 
     console.log(vendedor);

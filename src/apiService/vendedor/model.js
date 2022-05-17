@@ -24,9 +24,9 @@ Vendedor.create = (newVendedor, result) => {
 
     const query = 
     `INSERT INTO vendedor
-    (ve_nombre, ve_apellido, ve_dni, ve_direccion, ve_email, ve_telefono, ve_usuario, ve_clave, ve_f_create, ve_f_update, ve_u_create, ve_u_update, eliminado) 
+    (ve_nombre, ve_apellido, ve_dni, ve_direccion, ve_email, ve_telefono, ve_usuario, ve_clave, ve_f_create, ve_f_update, ve_u_create, ve_u_update) 
     values 
-    ('${newVendedor.ve_nombre}', '${newVendedor.ve_apellido}', '${newVendedor.ve_dni}', '${newVendedor.ve_direccion}', '${newVendedor.ve_email}', '${newVendedor.ve_telefono}', '${newVendedor.ve_usuario}', '${newVendedor.ve_clave}', NOW(), NOW(), '${newVendedor.ve_u_create}', '${newVendedor.ve_u_update}', '${newVendedor.eliminado}')`
+    ('${newVendedor.ve_nombre}', '${newVendedor.ve_apellido}', '${newVendedor.ve_dni}', '${newVendedor.ve_direccion}', '${newVendedor.ve_email}', '${newVendedor.ve_telefono}', '${newVendedor.ve_usuario}', '${newVendedor.ve_clave}', NOW(), NOW(), '${newVendedor.ve_u_create}', '${newVendedor.ve_u_update}')`
 
     sql.query(query, (err, res) => {
         
@@ -87,7 +87,7 @@ Vendedor.findById = (id, result) => {
 // Get All 
 Vendedor.getAll = (result) => {
 
-    let query = "SELECT * FROM vendedor WHERE eliminado = 0";
+    let query = "SELECT * FROM vendedor";
 
     sql.query(query, (err, res) => {
     if (err) {
