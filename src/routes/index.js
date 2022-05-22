@@ -5,6 +5,7 @@ module.exports = app => {
   const routerVendedor = require('./routesVendedor');
   const routerProducto = require('./routesProducto');
   const routerComprobante = require('./routesComprobante');
+  const routerDetalleComprobante = require('./routesDetalleComprobante');
   
   app.use('/categoria', routerCategoria);
   app.use('/cliente', routerCliente);
@@ -15,5 +16,6 @@ module.exports = app => {
   app.use('/categoria', routerCategoria);
   app.use('/cliente', routerCliente);
   app.use('/comprobante', routerComprobante);
+  app.use('/detallecomprobante',routerDetalleComprobante);
 
 };

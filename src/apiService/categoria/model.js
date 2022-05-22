@@ -71,7 +71,7 @@ Categoria.findById = (id, result) => {
 
 // Get All
 Categoria.getAll = result => {
-  let query = 'SELECT * FROM categoria WHERE eliminado = 0';
+  let query = 'SELECT * FROM categoria';
 
   sql.query(query, (err, res) => {
     if (err) {
