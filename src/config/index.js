@@ -11,19 +11,29 @@ if (envFound.error) {
 
 const config = {
 
+  /**
+   * Environment
+   */
+
+  node: {
+    env: process.env.ENV
+  },
+
+  /**
+  * Application variables
+  */
+
   applicationName: process.env.APPLICATION_NAME,
-
   applicationDescription: process.env.APPLICATION_DESCRIPCION,
-
   applicationVersion: process.env.npm_package_version,
 
   /**
-   * Your favorite port
+   * Define your favorite port
    */
   port: parseInt(process.env.PORT, 10),
 
   /**
-   * That long string from mlab
+   * That long string from mysql
    */
   databaseURL: process.env.MYSQL_URI,
   databaseDB: process.env.MYSQL_DB,

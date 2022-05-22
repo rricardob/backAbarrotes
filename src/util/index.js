@@ -9,10 +9,11 @@ class Utils {
         const date = dateObject.getDate();
         const month = dateObject.getMonth() + 1;
         const year = dateObject.getFullYear();
+        const time = dateObject.getTime();
 
         // prints date & time in YYYY-MM-DD format
 
-        return `${year}-${month}-${date}`;
+        return `${date}-${month}-${year}-${time}-`;
     }
 
 }

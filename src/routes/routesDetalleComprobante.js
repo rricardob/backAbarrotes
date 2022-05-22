@@ -34,9 +34,14 @@ const detalleComprobante = require("../apiService/detalleComprobante/controller"
  *        pr_id:
  *          type: integer
  *          description: clave foranea de la tabla producto
+ *        co_id:
+ *          type: integer
+ *          description: clave foranea de la tabla comprobante
  *      required:
  *        - pr_id
+ *        - co_id
  *      example:
+ *        co_id: 1
  *        dec_cantidad: 1
  *        dec_f_create: 2022-03-22 22:43:09
  *        dec_f_update: 2022-03-22 22:43:09

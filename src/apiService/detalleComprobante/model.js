@@ -20,10 +20,10 @@ const detalleComprobante = function (detalleComprobante) {
 detalleComprobante.create = (newDetComprobante, result) => {
 
     const query = `INSERT INTO detalle_comprobante
-        (dec_cantidad, dec_f_create, dec_f_update, dec_u_create, dec_u_update, pr_id, co_id, cl_id, ve_id)
+        (dec_cantidad, dec_f_create, dec_f_update, dec_u_create, dec_u_update, pr_id, co_id)
         VALUES('${newDetComprobante.dec_cantidad}', NOW(), NOW(), 
         '${newDetComprobante.dec_u_create}', '${newDetComprobante.dec_u_update}', '${newDetComprobante.pr_id}', 
-        '${newDetComprobante.co_id}', '${newDetComprobante.cl_id}', '${newDetComprobante.ve_id}');`
+        '${newDetComprobante.co_id}');`
 
     sql.query(query, (err, res) => {
         if (err) {
@@ -50,7 +50,7 @@ detalleComprobante.getAll = (result) => {
         }
 
         result(null, res);
-        Logger.info("Detalle Comprobante: ",{ message: res });
+        Logger.debug("Detalle Comprobante: ", res );
     });
 };
 

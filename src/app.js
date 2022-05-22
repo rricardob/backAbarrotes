@@ -18,7 +18,7 @@ async function startServer() {
     loader.expressApp(app)
 
     app.listen(config.port, () => {
-        Logger.info(`
+        Logger.debug(`
       ################################################
       🛡️  Server listening on port: ${config.port} 🛡️
       ################################################
