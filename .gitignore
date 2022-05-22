@@ -1,2 +1,6 @@
 /node_modules
 .env
+.idea/.gitignore
+.idea/backAbarrotes.iml
+.idea/modules.xml
+.idea/vcs.xml
