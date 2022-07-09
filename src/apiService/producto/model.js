@@ -84,7 +84,8 @@ Producto.findById = (id, result) => {
 // Get All 
 Producto.getAll = (result) => {
 
-    let query = "SELECT * FROM producto WHERE eliminado = 0";
+    let query = "select p.pr_id, p.pr_nombre, p.pr_precio, p.pr_stock, p.pr_f_create, p.pr_f_update, p.pr_u_create, p.pr_u_update, p.eliminado, p.ca_id, c.ca_nombre from producto p " +
+        "join categoria c on c.ca_id = p.ca_id order by p.pr_f_create";
 
     sql.query(query, (err, res) => {
     if (err) {
