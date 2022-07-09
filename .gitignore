@@ -4,5 +4,6 @@
 .idea/backAbarrotes.iml
 .idea/modules.xml
 .idea/vcs.xml
-/logs/
+/logs
 .env
+.log
