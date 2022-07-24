@@ -102,8 +102,8 @@ Producto.getAll = (result) => {
 // Update By Id 
 Producto.updateById = (id, producto, result) => {
 
-    sql.query("UPDATE producto SET pr_nombre = ?, pr_precio = ?, pr_stock = ?, pr_f_update = NOW(), pr_u_update = ? , eliminado = ? WHERE pr_id = ?",
-    [producto.pr_nombre, producto.pr_precio, producto.pr_stock, producto.pr_u_update, producto.eliminado , id],
+    sql.query("UPDATE producto SET pr_nombre = ?, pr_precio = ?, pr_stock = ?, pr_f_update = NOW(), pr_u_update = ? , eliminado = ?, ca_id = ? WHERE pr_id = ?",
+    [producto.pr_nombre, producto.pr_precio, producto.pr_stock, producto.pr_u_update, producto.eliminado , producto.ca_id, id],
     (err, res) => {
 
         console.log(err)
