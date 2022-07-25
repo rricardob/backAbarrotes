@@ -58,7 +58,12 @@ Comprobante.findByName = (co_nombre, result) => {
 // Get All 
 Comprobante.getAll = (result) => {
 
-    let query = "SELECT * FROM comprobante WHERE eliminado = 0";
+    let query = "SELECT c.co_id, c.co_fecha, concat(c2.cl_nombre,\" \", c2.cl_apellido) as cliente, \n" +
+        "concat(v.ve_nombre,\" \",v.ve_apellido) as vendedor , \n" +
+        "c.eliminado, \n" +
+        "c.co_total  FROM comprobante c \n" +
+        "left join vendedor v ON v.ve_id = c.ve_id \n" +
+        "left join cliente c2 on c2.cl_id = c.cl_id order by c.co_id asc";
 
     sql.query(query, (err, res) => {
     if (err) {
