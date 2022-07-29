@@ -1,5 +1,6 @@
 const { Logger } = require("../../loaders/logger");
 const Comprobante = require("./model");
+const returnEmptyIfPropertyIsNullOrEmpty = require("../../util/Utils")
 
 
 exports.create = (req, res) => {
@@ -54,12 +55,18 @@ exports.findAll = (req, res) => {
 
     let params = req.query
 
+    let vendor = returnEmptyIfPropertyIsNullOrEmpty(params,"vendedor")
+    let client = returnEmptyIfPropertyIsNullOrEmpty(params, "cliente")
+    let state = returnEmptyIfPropertyIsNullOrEmpty(params, "estado")
+    let fec_ini = returnEmptyIfPropertyIsNullOrEmpty(params, "fecinicio")
+    let fec_fin = returnEmptyIfPropertyIsNullOrEmpty(params, "fecfin")
+
     const comprobante = {
-        ve_id : params.vendedor ? params.vendedor : '' ,
-        cl_id : params.cliente ? params.cliente : '',
-        cl_es : params.estado ? params.estado : '',
-        fec_ini : params.fecinicio ? params.fecinicio : '',
-        fec_fin : params.fecfin ? params.fecfin : ''
+        ve_id : vendor ,
+        cl_id : client,
+        cl_es : state,
+        fec_ini : fec_ini,
+        fec_fin : fec_fin
     };
 
     Comprobante.getAll(comprobante, (err, data) => {

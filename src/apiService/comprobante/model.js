@@ -113,6 +113,7 @@ Comprobante.getAll = (comprobante, result) => {
             });
             query.on("end", function () {
                 //sql.end(); // close connection
+                console.log("response -> ", response)
                 Logger.info("Comprobantes: ", response);
                 result(null, response);
             });
