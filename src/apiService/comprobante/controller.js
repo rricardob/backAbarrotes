@@ -49,7 +49,7 @@ exports.create = (req, res) => {
 
 };
 
-// Find all Comprobantes from the database (with condition).
+
 exports.findAll = (req, res) => {
 
     let params = req.query
