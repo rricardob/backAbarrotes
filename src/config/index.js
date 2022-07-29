@@ -40,7 +40,7 @@ const config = {
   databaseUSER: process.env.MYSQL_USER,
   databasePASS: process.env.MYSQL_PASSWORD,
   databasePORT: process.env.MYSQL_PORT,
-
+  multipleStatements: process.env.MYSQL_MULTIPLE_SENTENCES,
 
   /**
    * Used by winston logger

@@ -83,15 +83,40 @@ const comprobante = require("../apiService/comprobante/controller");
  *   get:
  *     summary: listar los comprobantes
  *     tags: [Comprobante]
+ *     parameters:
+ *       - in: query
+ *         name: cliente
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: id del cliente
+ *       - in: query
+ *         name: vendedor
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: id del vendedor
+ *       - in: query
+ *         name: estado
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: estado del comprobante
+ *       - in: query
+ *         name: fecinicio
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: fecha de inicio
+ *       - in: query
+ *         name: fecfin
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: fecha fin
  *     responses:
  *       200:
  *         description: listado de informacion satisfactoria
- *         content:
- *            application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   $ref: '#/components/schemas/comprobante' 
  */
  router.get("/findAll", comprobante.findAll);
 

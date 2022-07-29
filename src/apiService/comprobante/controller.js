@@ -52,7 +52,17 @@ exports.create = (req, res) => {
 // Find all Comprobantes from the database (with condition).
 exports.findAll = (req, res) => {
 
-    Comprobante.getAll((err, data) => {
+    let params = req.query
+
+    const comprobante = {
+        ve_id : params.vendedor ? params.vendedor : '' ,
+        cl_id : params.cliente ? params.cliente : '',
+        cl_es : params.estado ? params.estado : '',
+        fec_ini : params.fecinicio ? params.fecinicio : '',
+        fec_fin : params.fecfin ? params.fecfin : ''
+    };
+
+    Comprobante.getAll(comprobante, (err, data) => {
 
     if (err) {
         Logger.error(`Error: ${err}`);

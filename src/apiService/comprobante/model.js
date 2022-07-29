@@ -56,16 +56,87 @@ Comprobante.findByName = (co_nombre, result) => {
 };
 
 // Get All 
-Comprobante.getAll = (result) => {
+Comprobante.getAll = (comprobante, result) => {
 
-    let query = "SELECT c.co_id, c.co_fecha, concat(c2.cl_nombre,\" \", c2.cl_apellido) as cliente, \n" +
-        "concat(v.ve_nombre,\" \",v.ve_apellido) as vendedor , \n" +
-        "c.eliminado, \n" +
-        "c.co_total  FROM comprobante c \n" +
-        "left join vendedor v ON v.ve_id = c.ve_id \n" +
-        "left join cliente c2 on c2.cl_id = c.cl_id order by c.co_id asc";
+    let params = `
+    set @ve_id='${comprobante.ve_id}';
+    set @cl_id='${comprobante.cl_id}';
+    set @cl_es='${comprobante.cl_es}';
+    set @fec_ini='${comprobante.fec_ini}';
+    set @fec_fin='${comprobante.fec_fin}';
+    `
+    let sentence = `
+            SELECT c.co_id, cast(c.co_fecha as date) fecha, concat(c2.cl_nombre," ", c2.cl_apellido) as cliente,
+            concat(v.ve_nombre," ",v.ve_apellido) as vendedor ,
+            c.eliminado,
+            c.co_total  FROM comprobante c
+            left join vendedor v ON v.ve_id = c.ve_id
+            left join cliente c2 on c2.cl_id = c.cl_id
+            where (@ve_id is null or @ve_id = '' or c.ve_id = @ve_id) and
+            (@cl_id is null or @cl_id = '' or c.cl_id = @cl_id) and
+            (@cl_es is null or @cl_es = '' or c.eliminado = @cl_es) and 
+            ((@fec_ini is null or @fec_ini = '') or 
+            (@fec_fin is null or @fec_fin = '') or
+            (cast(c.co_fecha as date) between cast(@fec_ini as date) and cast(@fec_fin as date) ))
+             order by c.co_id asc;
+    `;
 
-    sql.query(query, (err, res) => {
+    //var result = []
+    let queryParams = sql.query(params);
+    queryParams
+        .on('error', function(err) {
+            // Handle error, an 'end' event will be emitted after this as well
+            console.error(err)
+            Logger.error("error: ", err);
+            result(null, err);
+        })
+        .on('fields', function(fields) {
+            // the field packets for the rows to follow
+        })
+        .on('result', function(row) {
+            // Pausing the connnection is useful if your processing involves I/O
+            //console.log("result ",row)
+            //result.push(row);
+        })
+        .on('end', function() {
+            // all rows have been received
+            let response = []
+            let query = sql.query(sentence);
+            query.on("error", function (err) {
+                // handle error
+                console.error(err)
+                Logger.error("error: ", err);
+                result(null, err);
+            });
+            query.on("result", function (row) {
+                response.push(row)
+            });
+            query.on("end", function () {
+                //sql.end(); // close connection
+                Logger.info("Comprobantes: ", response);
+                result(null, response);
+            });
+        });
+
+    /*var query1 = sql.query(sql1);
+    query1.on("error", function (err) {
+        // handle error
+    });
+    query1.on("end", function () {
+        var query2 = connection.query(sql2);
+        query2.on("error", function (err) {
+            // handle error
+        });
+        query2.on("result", function (row) {
+            result.push(row);
+        });
+        query2.on("end", function () {
+            connection.end(); // close connection
+            console.log(result); // display result
+        });
+    });*/
+
+    /*sql.query(query,(err, res) => {
     if (err) {
         Logger.error("error: ", err);
         result(null, err);
@@ -74,7 +145,7 @@ Comprobante.getAll = (result) => {
 
     result(null, res);
     Logger.info("Comprobante: ", res);
-    });
+    });*/
 };
 
 
