@@ -13,7 +13,6 @@ const Comprobante = function (comprobante) {
     this.ve_id = comprobante.ve_id
 };
 
-
 // Create 
 Comprobante.create = (newComprobante, result) => {
 
@@ -35,7 +34,6 @@ Comprobante.create = (newComprobante, result) => {
     result(null, { id: res.insertId, ...newComprobante });
     });
 };
-
 
 // Find By Nombre_Comprobante
 Comprobante.findByName = (co_nombre, result) => {
@@ -149,7 +147,6 @@ Comprobante.getAll = (comprobante, result) => {
     });*/
 };
 
-
 // Update By Id 
 Comprobante.updateById = (id, result) => {
 
@@ -177,8 +174,6 @@ Comprobante.updateById = (id, result) => {
     );
 };
 
-
-
 // Remove 
 Comprobante.remove = (id, result) => {
 
@@ -201,5 +196,27 @@ Comprobante.remove = (id, result) => {
     });
 };
 
+Comprobante.findById = (id, result) => {
+
+    const query =
+        `
+        select c.co_id, cast(c.co_fecha as date) fecha, c.co_total, dc.dec_cantidad, c.eliminado, p.pr_id, p.pr_nombre, p.pr_precio, p.pr_stock, ca.ca_nombre, (p.pr_precio * dc.dec_cantidad) as subtotal from comprobante c
+        left join detalle_comprobante dc on dc.co_id = c.co_id
+        left join producto p on p.pr_id = dc.pr_id
+        left join categoria ca on ca.ca_id = p.ca_id
+        where c.co_id = ${id}
+        `
+    sql.query(query,(err, res) => {
+        if (err) {
+            Logger.error("error: findById Comprobante", err);
+            result(null, err);
+            return;
+        }
+
+        result(null, res);
+        Logger.info("findById Comprobante: ", res);
+    });
+
+}
 
 module.exports = Comprobante;

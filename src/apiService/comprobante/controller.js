@@ -1,7 +1,7 @@
 const { Logger } = require("../../loaders/logger");
 const Comprobante = require("./model");
 const returnEmptyIfPropertyIsNullOrEmpty = require("../../util/Utils")
-
+const generatePDF = require("../../pdf/index")
 
 exports.create = (req, res) => {
 
@@ -50,7 +50,6 @@ exports.create = (req, res) => {
 
 };
 
-
 exports.findAll = (req, res) => {
 
     let params = req.query
@@ -82,8 +81,6 @@ exports.findAll = (req, res) => {
 
 };
 
-
-// Update Comprobante identified by the id in the request
 exports.update = (req, res) => {
 
     // Validate Request
@@ -113,8 +110,6 @@ exports.update = (req, res) => {
 
 };
 
-
-// Remove Comprobante with the specified id in the request
 exports.delete = (req, res) => {
 
     Comprobante.remove(req.params.id, (err, data) => {
@@ -133,4 +128,20 @@ exports.delete = (req, res) => {
     });
 };
 
+exports.finById = (req, res) => {
 
+    let params = req.params.id
+
+    //let id_sale_receipt = returnEmptyIfPropertyIsNullOrEmpty(params,"comprobante")
+
+    Comprobante.findById(req.params.id, (err, data) => {
+        if (err) {
+            Logger.error(`Error: ${err}`);
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving Comprobante by Id."
+            });
+        } else res.send(data);
+    });
+
+};

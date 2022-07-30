@@ -73,7 +73,6 @@ const comprobante = require("../apiService/comprobante/controller");
  *       200:
  *         description: comprobante creado satisfactoriamente
  */
-
  router.post("/create/", comprobante.create);
 
  
@@ -169,7 +168,30 @@ const comprobante = require("../apiService/comprobante/controller");
  *       404:
  *         description: comprobante not found
  */
- router.delete("/delete/:id", comprobante.delete); 
+ router.delete("/delete/:id", comprobante.delete);
+
+
+/**
+ * @swagger
+ * /comprobante/findById/{id}:
+ *   get:
+ *     summary: recuperar un comprobante por id
+ *     tags: [Comprobante]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: comprobante id
+ *     responses:
+ *       200:
+ *         description: comprobante recuperado satisfactoriamente
+ *       404:
+ *         description: comprobante not found
+ */
+router.get("/findById/:id", comprobante.finById);
+
 
 
 module.exports = router
