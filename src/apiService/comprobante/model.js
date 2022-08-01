@@ -200,10 +200,14 @@ Comprobante.findById = (id, result) => {
 
     const query =
         `
-        select c.co_id, cast(c.co_fecha as date) fecha, c.co_total, dc.dec_cantidad, c.eliminado, p.pr_id, p.pr_nombre, p.pr_precio, p.pr_stock, ca.ca_nombre, (p.pr_precio * dc.dec_cantidad) as subtotal from comprobante c
+        select concat(v.ve_nombre," ",v.ve_apellido) as vendedor, cl.cl_dni, cl.cl_direccion, cl.cl_email, concat(cl.cl_nombre," ", cl.cl_apellido) as cliente, 
+        c.co_id, cast(c.co_fecha as date) fecha, c.co_total, dc.dec_cantidad, c.eliminado, 
+        p.pr_id, p.pr_nombre, p.pr_precio, p.pr_stock, ca.ca_nombre, (p.pr_precio * dc.dec_cantidad) as subtotal from comprobante c
         left join detalle_comprobante dc on dc.co_id = c.co_id
         left join producto p on p.pr_id = dc.pr_id
         left join categoria ca on ca.ca_id = p.ca_id
+        left join cliente cl on cl.cl_id = c.cl_id
+        left join vendedor v ON v.ve_id = c.ve_id
         where c.co_id = ${id}
         `
     sql.query(query,(err, res) => {
