@@ -192,6 +192,26 @@ const comprobante = require("../apiService/comprobante/controller");
  */
 router.get("/findById/:id", comprobante.finById);
 
+/**
+ * @swagger
+ * /comprobante/anular/{id}:
+ *   get:
+ *     summary: anular un comprobante por id
+ *     tags: [Comprobante]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: comprobante id
+ *     responses:
+ *       200:
+ *         description: comprobante anulado satisfactoriamente
+ *       404:
+ *         description: comprobante not found
+ */
+router.get("/anular/:id", comprobante.anular);
 
 
 module.exports = router

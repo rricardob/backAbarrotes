@@ -145,3 +145,18 @@ exports.finById = (req, res) => {
     });
 
 };
+
+exports.anular = (req, res) => {
+
+    let params = req.params.id
+
+    Comprobante.anular(req.params.id, (err, data) => {
+        if (err) {
+            Logger.error(`Error: ${err}`);
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while cancel Comprobante by Id => "+params
+            });
+        } else res.send(data);
+    });
+}

@@ -223,4 +223,28 @@ Comprobante.findById = (id, result) => {
 
 }
 
+Comprobante.anular = (id, result) => {
+
+    const query = `CALL sp_rollback_stock(${id})`
+
+    sql.query(query, (err, res) => {
+
+        if (err) {
+            Logger.error("error: anular Comprobante", err);
+            result(null, err);
+            return;
+        }
+
+        if (res[4].affectedRows === 0) {
+            Logger.info("anular Comprobante not update stock: ", res);
+            result({ kind: "not update stock" }, null);
+            return;
+        }else{
+            Logger.info("anular Comprobante ok: ", res);
+            result(null, {kind: "update ok", rows_affected: res[4].affectedRows});
+        }
+
+    })
+}
+
 module.exports = Comprobante;
