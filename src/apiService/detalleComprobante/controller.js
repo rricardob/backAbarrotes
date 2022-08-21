@@ -11,18 +11,23 @@ exports.create = (req, res) => {
         });
     }
 
-    const detComprobante = new detalleComprobante({
+    /*const detComprobante = new detalleComprobante({
         dec_cantidad: req.body.dec_cantidad,
         dec_u_create: req.body.dec_u_create,
         dec_u_update: req.body.dec_u_update,
         pr_id: req.body.pr_id,
         co_id: req.body.co_id,
-        cl_id: req.body.cl_id,
-        ve_id: req.body.ve_id
-    });
+    });*/
 
+    console.log("array ", req.body)
+    let arrDetail = []
+    req.body.forEach(item => {
+        arrDetail.push([item.co_id,item.dec_cantidad,item.dec_f_create,item.dec_f_update,item.dec_u_create,item.dec_u_update,item.pr_id])
+    })
 
-    detalleComprobante.create(detComprobante, (err, data) => {
+    console.log("array armado ", arrDetail)
+
+    detalleComprobante.create(arrDetail, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -43,12 +48,12 @@ exports.findAll = (req, res) => {
                 message:
                     err.message || "Some error occurred while retrieving Detalle Comprobante."
             });
-        } else if(data === null || data === undefined || data.length === 0){
+        } else if (data === null || data === undefined || data.length === 0) {
             Logger.info(`not content`);
             res.status(204).send({
                 message: "not content while retrieving Detalle Comprobante."
             });
-        }else{
+        } else {
             res.send(data)
         }
     });

@@ -47,7 +47,6 @@ const detalleComprobante = require("../apiService/detalleComprobante/controller"
  *        dec_f_update: 2022-03-22 22:43:09
  *        dec_u_create: rbueno
  *        dec_u_update: rbueno
- *        eliminado: 0
  *        pr_id: 1
  */
 
@@ -63,8 +62,9 @@ const detalleComprobante = require("../apiService/detalleComprobante/controller"
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             $ref: '#/components/schemas/detallecomprobante'
+ *             type: array
+ *             items:
+ *              $ref: '#/components/schemas/detallecomprobante'
  *     responses:
  *       200:
  *         description: detalle comprobante creado satisfactoriamente

@@ -13,9 +13,6 @@ const comprobante = require("../apiService/comprobante/controller");
  *        co_id:
  *          type: integer
  *          description: id autogenerado del comprobante
- *        co_nombre:
- *          type: string
- *          description: nombre del comprobante
  *        co_fecha:
  *          type: date
  *          description: fecha del comprobante
@@ -40,11 +37,12 @@ const comprobante = require("../apiService/comprobante/controller");
  *        ve_id:
  *          type: integer
  *          description: clave foranea de la tabla vendedor
+ *        co_total:
+ *          type: double
+ *          description: monto total del comprobante
  *      required:
- *        - co_nombre
  *        - u_create
  *      example:
- *        co_nombre : B001-000001
  *        co_fecha :  2022-03-22 22:43:09
  *        co_f_create: 2022-03-22 22:43:09
  *        co_f_update: 2022-03-22 22:43:09
@@ -52,7 +50,8 @@ const comprobante = require("../apiService/comprobante/controller");
  *        co_u_update: fvargas
  *        eliminado: 0  
  *        cl_id: 1
- *        ve_id: 1  
+ *        ve_id: 1
+ *        co_total: 1000
  */
 
 

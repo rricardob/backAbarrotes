@@ -4,13 +4,13 @@ const { sql } = require("../../services/mysql");
 // Constructor
 const Comprobante = function (comprobante) {
     this.co_id = comprobante.co_id,
-    this.co_nombre = comprobante.co_nombre,
     this.co_fecha = comprobante.co_fecha,
     this.co_u_create = comprobante.co_u_create,
     this.co_u_update = comprobante.co_u_update,
     this.eliminado = comprobante.eliminado,
     this.cl_id = comprobante.cl_id,
-    this.ve_id = comprobante.ve_id
+    this.ve_id = comprobante.ve_id,
+    this.co_total = comprobante.co_total
 };
 
 // Create 
@@ -18,10 +18,10 @@ Comprobante.create = (newComprobante, result) => {
 
     const query = 
     `INSERT INTO comprobante
-    (co_fecha,co_nombre,co_f_create,co_f_update,co_u_create,co_u_update,cl_id,ve_id) 
+    (co_fecha,co_f_create,co_f_update,co_u_create,co_u_update,cl_id,ve_id,co_total) 
     values 
-    ('${newComprobante.co_fecha}','${newComprobante.co_nombre}',NOW() ,NOW(), '${newComprobante.co_u_create}', 
-    '${newComprobante.co_u_update}', '${newComprobante.cl_id}', '${newComprobante.ve_id}');`
+    ('${newComprobante.co_fecha}',NOW() ,NOW(), '${newComprobante.co_u_create}', 
+    '${newComprobante.co_u_update}', '${newComprobante.cl_id}', '${newComprobante.ve_id}', '${newComprobante.co_total}');`
 
     sql.query(query, (err, res) => {
     if (err) {
