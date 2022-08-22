@@ -20,11 +20,12 @@ detalleComprobante.create = (arrDetail, result) => {
         if (err) {
             Logger.error("error: ", err);
             result(err, null);
-            return;
+            sql.destroy()
         }
 
         Logger.info("created Detalle Comprobante: ", { res, ...arrDetail });
         result(null, { res, ...arrDetail});
+        sql.destroy()
     });
 };
 
@@ -37,11 +38,12 @@ detalleComprobante.getAll = (result) => {
         if (err) {
             Logger.error("error: ", err);
             result(null, err);
-            return;
+            sql.destroy()
         }
 
-        result(null, res);
         Logger.debug("Detalle Comprobante: ", res );
+        result(null, res);
+        sql.destroy()
     });
 };
 
@@ -52,22 +54,21 @@ detalleComprobante.updateById = (id, result) => {
         [comprobante.co_nombre, id],
         (err, res) => {
 
-            console.log(err)
-
             if (err) {
                 Logger.error("error: ", err);
                 result(null, err);
-                return;
+                sql.destroy()
             }
 
             if (res.affectedRows == 0) {
                 // Not found Comprobante with the id
                 result({ kind: "not_found" }, null);
-                return;
+                sql.destroy()
             }
 
             Logger.info("updated comprobante: ", { id: id, ...comprobante });
             result(null, { id: id, ...comprobante });
+            sql.destroy()
         }
     );
 };
@@ -80,17 +81,18 @@ detalleComprobante.remove = (id, result) => {
         if (err) {
             Logger.error("error: "+ err);
             result(null, err);
-            return;
+            sql.destroy()
         }
 
         if (res.affectedRows === 0) {
             // not found Comprobante with the id
             result({ kind: "not_found" }, null);
-            return;
+            sql.destroy()
         }
 
         Logger.info("deleted Detalle Comprobante with id: "+ id);
         result(null, res);
+        sql.destroy()
     });
 };
 
