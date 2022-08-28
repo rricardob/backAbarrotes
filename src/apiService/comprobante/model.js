@@ -22,35 +22,36 @@ Comprobante.create = (newComprobante, result) => {
     values 
     ('${newComprobante.co_fecha}',NOW() ,NOW(), '${newComprobante.co_u_create}', 
     '${newComprobante.co_u_update}', '${newComprobante.cl_id}', '${newComprobante.ve_id}', '${newComprobante.co_total}');`
+    return new Promise((resolve, reject) => {
+        sql.query(query, (err, res) => {
+            if (err) {
+                Logger.error("error: ", err);
+                result(err, null);
 
-    sql.query(query, (err, res) => {
-        if (err) {
-            Logger.error("error: ", err);
-            result(err, null);
-            sql.destroy()
-        }
+            }
 
-        Logger.info("created Comprobante: ", {id: res.insertId, ...newComprobante});
-        result(null, {id: res.insertId, ...newComprobante});
-        sql.destroy()
-    });
+            Logger.info("created Comprobante: ", {id: res.insertId, ...newComprobante});
+            result(null, {id: res.insertId, ...newComprobante});
+
+        });
+    })
 };
 
 // Find By Nombre_Comprobante
 Comprobante.findByName = (co_nombre, result) => {
 
-    sql.query(`select count(*) as result from comprobante where co_nombre = ?`, co_nombre, (err, res) => {
+    return new Promise((resolve, reject) => {
+        sql.query(`select count(*) as result from comprobante where co_nombre = ?`, co_nombre, (err, res) => {
 
-        if (err) {
-            Logger.error('error: ', err)
-            result(err, null)
-            sql.destroy()
-        }
+            if (err) {
+                Logger.error('error: ', err)
+                result(err, null)
 
-        Logger.info("Comprobante: ", res[0]);
-        result(null, res[0].result);
-        sql.destroy()
+            }
 
+            Logger.info("Comprobante: ", res[0]);
+            result(null, res[0].result);
+        })
     })
 };
 
@@ -81,44 +82,45 @@ Comprobante.getAll = (comprobante, result) => {
     `;
 
     //var result = []
-    let queryParams = sql.query(params);
-    queryParams
-        .on('error', function (err) {
-            // Handle error, an 'end' event will be emitted after this as well
-            console.error(err)
-            Logger.error("error: ", err);
-            result(null, err);
-        })
-        .on('fields', function (fields) {
-            // the field packets for the rows to follow
-        })
-        .on('result', function (row) {
-            // Pausing the connnection is useful if your processing involves I/O
-            //console.log("result ",row)
-            //result.push(row);
-        })
-        .on('end', function () {
-            // all rows have been received
-            let response = []
-            let query = sql.query(sentence);
-            query.on("error", function (err) {
-                // handle error
+    return new Promise((resolve, reject) => {
+        let queryParams = sql.query(params);
+        queryParams
+            .on('error', function (err) {
+                // Handle error, an 'end' event will be emitted after this as well
                 console.error(err)
                 Logger.error("error: ", err);
                 result(null, err);
-            });
-            query.on("result", function (row) {
-                response.push(row)
-            });
-            query.on("end", function () {
-                //sql.end(); // close connection
-                console.log("response -> ", response)
-                Logger.info("Comprobantes: ", response);
-                result(null, response);
-                sql.destroy()
-            });
-        });
+            })
+            .on('fields', function (fields) {
+                // the field packets for the rows to follow
+            })
+            .on('result', function (row) {
+                // Pausing the connnection is useful if your processing involves I/O
+                //console.log("result ",row)
+                //result.push(row);
+            })
+            .on('end', function () {
+                // all rows have been received
+                let response = []
+                let query = sql.query(sentence);
+                query.on("error", function (err) {
+                    // handle error
+                    console.error(err)
+                    Logger.error("error: ", err);
+                    result(null, err);
+                });
+                query.on("result", function (row) {
+                    response.push(row)
+                });
+                query.on("end", function () {
+                    //sql.end(); // close connection
+                    console.log("response -> ", response)
+                    Logger.info("Comprobantes: ", response);
+                    result(null, response);
 
+                });
+            });
+    })
     /*var query1 = sql.query(sql1);
     query1.on("error", function (err) {
         // handle error
@@ -151,51 +153,54 @@ Comprobante.getAll = (comprobante, result) => {
 
 // Update By Id 
 Comprobante.updateById = (id, result) => {
+    return new Promise((resolve, reject) => {
+        sql.query("UPDATE comprobante SET co_nombre = '?' ,co_f_update = NOW()  WHERE co_id = ?",
+            [comprobante.co_nombre, id],
+            (err, res) => {
 
-    sql.query("UPDATE comprobante SET co_nombre = '?' ,co_f_update = NOW()  WHERE co_id = ?",
-        [comprobante.co_nombre, id],
-        (err, res) => {
+                if (err) {
+                    Logger.error("error: ", err);
+                    result(null, err);
 
-            if (err) {
-                Logger.error("error: ", err);
-                result(null, err);
-                sql.destroy()
+                }
+
+                if (res.affectedRows == 0) {
+                    // Not found Comprobante with the id
+                    result({kind: "not_found"}, null);
+
+                }
+
+                Logger.info("updated comprobante: ", {id: id, ...comprobante});
+                result(null, {id: id, ...comprobante});
+
             }
-
-            if (res.affectedRows == 0) {
-                // Not found Comprobante with the id
-                result({kind: "not_found"}, null);
-                sql.destroy()
-            }
-
-            Logger.info("updated comprobante: ", {id: id, ...comprobante});
-            result(null, {id: id, ...comprobante});
-            sql.destroy()
-        }
-    );
+        );
+    })
 };
 
 // Remove 
 Comprobante.remove = (id, result) => {
 
-    sql.query("UPDATE comprobante SET eliminado = 1 WHERE co_id = ?", id, (err, res) => {
+    return new Promise((resolve, reject) => {
+        sql.query("UPDATE comprobante SET eliminado = 1 WHERE co_id = ?", id, (err, res) => {
 
-        if (err) {
-            Logger.error("error: ", err);
-            result(null, err);
-            sql.destroy()
-        }
+            if (err) {
+                Logger.error("error: ", err);
+                result(null, err);
 
-        if (res.affectedRows == 0) {
-            // not found Comprobante with the id
-            result({kind: "not_found"}, null);
-            sql.destroy()
-        }
+            }
 
-        Logger.info("deleted Comprobante with id: ", id);
-        result(null, res);
-        sql.destroy()
-    });
+            if (res.affectedRows == 0) {
+                // not found Comprobante with the id
+                result({kind: "not_found"}, null);
+
+            }
+
+            Logger.info("deleted Comprobante with id: ", id);
+            result(null, res);
+
+        });
+    })
 };
 
 Comprobante.findById = (id, result) => {
@@ -212,17 +217,19 @@ Comprobante.findById = (id, result) => {
         left join vendedor v ON v.ve_id = c.ve_id
         where c.co_id = ${id}
         `
-    sql.query(query, (err, res) => {
-        if (err) {
-            Logger.error("error: findById Comprobante", err);
-            result(null, err);
-            sql.destroy()
-        }
+    return new Promise((resolve, reject) => {
+        sql.query(query, (err, res) => {
+            if (err) {
+                Logger.error("error: findById Comprobante", err);
+                result(null, err);
 
-        Logger.info("findById Comprobante: ", res);
-        result(null, res);
-        sql.destroy()
-    });
+            }
+
+            Logger.info("findById Comprobante: ", res);
+            result(null, res);
+
+        });
+    })
 
 }
 
@@ -230,24 +237,26 @@ Comprobante.anular = (id, result) => {
 
     const query = `CALL sp_rollback_stock(${id})`
 
-    sql.query(query, (err, res) => {
+    return new Promise((resolve, reject) => {
+        sql.query(query, (err, res) => {
 
-        if (err) {
-            Logger.error("error: anular Comprobante", err);
-            result(null, err);
-            sql.destroy()
-        }
+            if (err) {
+                Logger.error("error: anular Comprobante", err);
+                result(null, err);
 
-        if (res[4].affectedRows === 0) {
-            Logger.info("anular Comprobante not update stock: ", res);
-            result({kind: "not update stock"}, null);
-            sql.destroy()
-        } else {
-            Logger.info("anular Comprobante ok: ", res);
-            result(null, {kind: "update ok", rows_affected: res[4].affectedRows});
-            sql.destroy()
-        }
+            }
 
+            if (res[4].affectedRows === 0) {
+                Logger.info("anular Comprobante not update stock: ", res);
+                result({kind: "not update stock"}, null);
+
+            } else {
+                Logger.info("anular Comprobante ok: ", res);
+                result(null, {kind: "update ok", rows_affected: res[4].affectedRows});
+
+            }
+
+        })
     })
 }
 

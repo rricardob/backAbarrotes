@@ -15,18 +15,19 @@ const detalleComprobante = function (detalleComprobante) {
 detalleComprobante.create = (arrDetail, result) => {
 
     const query = "INSERT INTO detalle_comprobante (co_id,dec_cantidad, dec_f_create, dec_f_update, dec_u_create, dec_u_update, pr_id) VALUES ?"
+    return new Promise((resolve, reject) => {
+        sql.query(query, [arrDetail], (err, res) => {
+            if (err) {
+                Logger.error("error: ", err);
+                result(err, null);
 
-    sql.query(query, [arrDetail],(err, res) => {
-        if (err) {
-            Logger.error("error: ", err);
-            result(err, null);
-            sql.destroy()
-        }
+            }
 
-        Logger.info("created Detalle Comprobante: ", { res, ...arrDetail });
-        result(null, { res, ...arrDetail});
-        sql.destroy()
-    });
+            Logger.info("created Detalle Comprobante: ", {res, ...arrDetail});
+            result(null, {res, ...arrDetail});
+
+        });
+    })
 };
 
 
@@ -34,66 +35,72 @@ detalleComprobante.getAll = (result) => {
 
     let query = "SELECT * FROM detalle_comprobante";
 
-    sql.query(query, (err, res) => {
-        if (err) {
-            Logger.error("error: ", err);
-            result(null, err);
-            sql.destroy()
-        }
+    return new Promise((resolve, reject) => {
+        sql.query(query, (err, res) => {
+            if (err) {
+                Logger.error("error: ", err);
+                result(null, err);
 
-        Logger.debug("Detalle Comprobante: ", res );
-        result(null, res);
-        sql.destroy()
-    });
+            }
+
+            Logger.debug("Detalle Comprobante: ", res);
+            result(null, res);
+
+        });
+    })
 };
 
 
 detalleComprobante.updateById = (id, result) => {
 
-    sql.query("UPDATE detalle_comprobante SET co_nombre = '?' ,co_f_update = NOW()  WHERE co_id = ?",
-        [comprobante.co_nombre, id],
-        (err, res) => {
+    return new Promise((resolve, reject) => {
+        sql.query("UPDATE detalle_comprobante SET co_nombre = '?' ,co_f_update = NOW()  WHERE co_id = ?",
+            [comprobante.co_nombre, id],
+            (err, res) => {
 
-            if (err) {
-                Logger.error("error: ", err);
-                result(null, err);
-                sql.destroy()
+                if (err) {
+                    Logger.error("error: ", err);
+                    result(null, err);
+
+                }
+
+                if (res.affectedRows == 0) {
+                    // Not found Comprobante with the id
+                    result({kind: "not_found"}, null);
+
+                }
+
+                Logger.info("updated comprobante: ", {id: id, ...comprobante});
+                result(null, {id: id, ...comprobante});
+
             }
-
-            if (res.affectedRows == 0) {
-                // Not found Comprobante with the id
-                result({ kind: "not_found" }, null);
-                sql.destroy()
-            }
-
-            Logger.info("updated comprobante: ", { id: id, ...comprobante });
-            result(null, { id: id, ...comprobante });
-            sql.destroy()
-        }
-    );
+        );
+    })
 };
 
 
 detalleComprobante.remove = (id, result) => {
 
-    sql.query("UPDATE detalle_comprobante SET eliminado = 1 WHERE dec_id = ?", id, (err, res) => {
+    return new Promise((resolve, reject) => {
+        sql.query("UPDATE detalle_comprobante SET eliminado = 1 WHERE dec_id = ?", id, (err, res) => {
 
-        if (err) {
-            Logger.error("error: "+ err);
-            result(null, err);
-            sql.destroy()
-        }
+            if (err) {
+                Logger.error("error: " + err);
+                result(null, err);
 
-        if (res.affectedRows === 0) {
-            // not found Comprobante with the id
-            result({ kind: "not_found" }, null);
-            sql.destroy()
-        }
+            }
 
-        Logger.info("deleted Detalle Comprobante with id: "+ id);
-        result(null, res);
-        sql.destroy()
-    });
+            if (res.affectedRows === 0) {
+                // not found Comprobante with the id
+                result({kind: "not_found"}, null);
+
+            }
+
+            Logger.info("deleted Detalle Comprobante with id: " + id);
+            result(null, res);
+
+        });
+    })
 };
 
 

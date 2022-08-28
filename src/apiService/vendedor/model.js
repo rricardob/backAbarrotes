@@ -27,62 +27,65 @@ Vendedor.create = (newVendedor, result) => {
     (ve_nombre, ve_apellido, ve_dni, ve_direccion, ve_email, ve_telefono, ve_usuario, ve_clave, ve_f_create, ve_f_update, ve_u_create, ve_u_update) 
     values 
     ('${newVendedor.ve_nombre}', '${newVendedor.ve_apellido}', '${newVendedor.ve_dni}', '${newVendedor.ve_direccion}', '${newVendedor.ve_email}', '${newVendedor.ve_telefono}', '${newVendedor.ve_usuario}', '${newVendedor.ve_clave}', NOW(), NOW(), '${newVendedor.ve_u_create}', '${newVendedor.ve_u_update}')`
+    return new Promise((resolve, reject) => {
+        sql.query(query, (err, res) => {
 
-    sql.query(query, (err, res) => {
+            if (err) {
+                Logger.error("error: ", err);
+                result(err, null);
 
-        if (err) {
-            Logger.error("error: ", err);
-            result(err, null);
-            sql.destroy()
-        }
+            }
 
-        Logger.info("created vendedor: ", {id: res.insertId, ...newVendedor});
-        result(null, {id: res.insertId, ...newVendedor});
-        sql.destroy()
-    });
+            Logger.info("created vendedor: ", {id: res.insertId, ...newVendedor});
+            result(null, {id: res.insertId, ...newVendedor});
+
+        });
+    })
 };
 
 
 // Find By Name_Nombre 
 Vendedor.findByName = (ve_nombre, result) => {
+    return new Promise((resolve, reject) => {
+        sql.query(`select count(*) as result from vendedor where ve_nombre = ?`, ve_nombre, (err, res) => {
 
-    sql.query(`select count(*) as result from vendedor where ve_nombre = ?`, ve_nombre, (err, res) => {
+            if (err) {
+                Logger.error('error: ', err)
+                result(err, null)
 
-        if (err) {
-            Logger.error('error: ', err)
-            result(err, null)
-            sql.destroy()
-        }
+            }
 
-        Logger.info("Vendedor: ", res[0]);
-        result(null, res[0].result);
-        sql.destroy()
+            Logger.info("Vendedor: ", res[0]);
+            result(null, res[0].result);
 
+
+        })
     })
 }
 
 
 // Find By Id 
 Vendedor.findById = (id, result) => {
+    return new Promise((resolve, reject) => {
+        sql.query(`SELECT * FROM vendedor WHERE ve_id = ${id} and eliminado = 0`, (err, res) => {
 
-    sql.query(`SELECT * FROM vendedor WHERE ve_id = ${id} and eliminado = 0`, (err, res) => {
+            if (err) {
+                Logger.error("error: ", err);
+                result(err, null);
 
-        if (err) {
-            Logger.error("error: ", err);
-            result(err, null);
-            sql.destroy()
-        }
+            }
 
-        if (res.length) {
-            Logger.info("found vendedor: ", res[0]);
-            result(null, res[0]);
-            sql.destroy()
-        }
+            if (res.length) {
+                Logger.info("found vendedor: ", res[0]);
+                result(null, res[0]);
 
-        // Not found Vendedor with the id
-        result({kind: "not_found"}, null);
-        sql.destroy()
-    });
+            }
+
+            // Not found Vendedor with the id
+            result({kind: "not_found"}, null);
+
+        });
+    })
 };
 
 
@@ -90,69 +93,73 @@ Vendedor.findById = (id, result) => {
 Vendedor.getAll = (result) => {
 
     let query = "SELECT * FROM vendedor";
+    return new Promise((resolve, reject) => {
+        sql.query(query, (err, res) => {
+            if (err) {
+                Logger.error("error: ", err);
+                result(null, err);
 
-    sql.query(query, (err, res) => {
-        if (err) {
-            Logger.error("error: ", err);
-            result(null, err);
-            sql.destroy()
-        }
+            }
 
-        Logger.info("Vendedor: ", res);
-        result(null, res);
-        sql.destroy()
-    });
+            Logger.info("Vendedor: ", res);
+            result(null, res);
+
+        });
+    })
 };
 
 
 // Update By Id 
 Vendedor.updateById = (id, vendedor, result) => {
+    return new Promise((resolve, reject) => {
+        sql.query("UPDATE vendedor SET ve_nombre=?, ve_apellido=?, ve_dni=?, ve_direccion=?, ve_email=?, ve_telefono=?, ve_usuario=?, ve_clave=?, ve_f_update=NOW(), ve_u_update=?, eliminado=? WHERE ve_id = ?",
+            [vendedor.ve_nombre, vendedor.ve_apellido, vendedor.ve_dni, vendedor.ve_direccion, vendedor.ve_email, vendedor.ve_telefono, vendedor.ve_usuario, vendedor.ve_clave, vendedor.ve_u_update, vendedor.eliminado, id],
+            (err, res) => {
 
-    sql.query("UPDATE vendedor SET ve_nombre=?, ve_apellido=?, ve_dni=?, ve_direccion=?, ve_email=?, ve_telefono=?, ve_usuario=?, ve_clave=?, ve_f_update=NOW(), ve_u_update=?, eliminado=? WHERE ve_id = ?",
-        [vendedor.ve_nombre, vendedor.ve_apellido, vendedor.ve_dni, vendedor.ve_direccion, vendedor.ve_email, vendedor.ve_telefono, vendedor.ve_usuario, vendedor.ve_clave, vendedor.ve_u_update, vendedor.eliminado, id],
-        (err, res) => {
+                if (err) {
+                    Logger.error("error: ", err);
+                    result(null, err);
 
-            if (err) {
-                Logger.error("error: ", err);
-                result(null, err);
-                sql.destroy()
+                }
+
+                if (res.affectedRows == 0) {
+                    // Not found Vendedor with the id
+                    result({kind: "not_found"}, null);
+
+                }
+
+                Logger.info("updated vendedor: ", {id: id, ...vendedor});
+                result(null, {id: id, ...vendedor});
+
             }
-
-            if (res.affectedRows == 0) {
-                // Not found Vendedor with the id
-                result({kind: "not_found"}, null);
-                sql.destroy()
-            }
-
-            Logger.info("updated vendedor: ", {id: id, ...vendedor});
-            result(null, {id: id, ...vendedor});
-            sql.destroy()
-        }
-    );
+        );
+    })
 };
 
 
 // Remove 
 Vendedor.remove = (id, result) => {
 
-    sql.query("UPDATE vendedor SET eliminado = 1 WHERE ve_id = ?", id, (err, res) => {
+    return new Promise((resolve, reject) => {
+        sql.query("UPDATE vendedor SET eliminado = 1 WHERE ve_id = ?", id, (err, res) => {
 
-        if (err) {
-            Logger.error("error: ", err);
-            result(null, err);
-            sql.destroy()
-        }
+            if (err) {
+                Logger.error("error: ", err);
+                result(null, err);
 
-        if (res.affectedRows == 0) {
-            // not found Vendedor with the id
-            result({kind: "not_found"}, null);
-            sql.destroy()
-        }
+            }
 
-        Logger.info("deleted Vendedor with id: ", id);
-        result(null, res);
-        sql.destroy()
-    });
+            if (res.affectedRows == 0) {
+                // not found Vendedor with the id
+                result({kind: "not_found"}, null);
+
+            }
+
+            Logger.info("deleted Vendedor with id: ", id);
+            result(null, res);
+
+        });
+    })
 };
 
 
